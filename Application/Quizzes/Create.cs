@@ -4,13 +4,13 @@ using Domain.Quiz;
 using MediatR;
 using Persistence;
 
-namespace Application.Categories;
+namespace Application.Quizzes;
 
 public class Create
 {
    public class Command : IRequest<Result<Unit>>
    {
-      public CreateCategoryRequestDTO Category { get; set; }
+      public CreateQuizRequestDTO Quiz { get; set; }
    }
 
    public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -26,9 +26,9 @@ public class Create
 
       public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
       {
-         var category = new Category();
-         _mapper.Map(request.Category, category);
-         _context.Categories.Add(category);
+         var quiz = new Quiz();
+         _mapper.Map(request.Quiz, quiz);
+         _context.Quizzes.Add(quiz);
          await _context.SaveChangesAsync();
 
          return Result<Unit>.Success(Unit.Value);

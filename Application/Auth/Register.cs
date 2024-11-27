@@ -1,5 +1,4 @@
 using API.DTOs.Accounts;
-using Application.Cart;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -47,10 +46,9 @@ public class Register
             if (result.Succeeded)
             {
                 _logger.LogError(user.Id);
-                await _mediator.Send(new Create.Command { UserId = user.Id });
                 return user;
             }
-            
+
             return null;
         }
     }

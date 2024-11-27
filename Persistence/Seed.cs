@@ -1,7 +1,6 @@
 using Domain;
 using Domain.Image;
-using Domain.Order;
-using Domain.Product;
+using Domain.Quiz;
 using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
@@ -11,12 +10,12 @@ public class Seed
     public static SeedingConfig SeedingConfig { get; set; } = new SeedingConfig
     {
         SeedUsers = false,
-        SeedProducts = false,
+        SeedQuizzes = false,
         SeedOrders = true
     };
-    
+
     private static readonly Random _random = new();
-    
+
     private static DataContext _context;
     private static UserManager<User> _userManager;
 
@@ -25,9 +24,7 @@ public class Seed
 
     private static List<User> _users;
     private static List<Category> _categories;
-    private static List<Product> _products;
-    private static List<OrderDetail> _orderDetails;
-    private static List<Order> _orders;
+    private static List<Quiz> _quizzes;
 
     public static async Task SeedData(DataContext context, UserManager<User> userManager)
     {
@@ -45,18 +42,11 @@ public class Seed
             CreateUsers();
         }
 
-        if (SeedingConfig.SeedProducts)
+        if (SeedingConfig.SeedQuizzes)
         {
-            SeedProducts();
+            SeedQuizzes();
             context.AttachRange(_categories);
-            context.AttachRange(_products);
-        }
-
-        if (SeedingConfig.SeedOrders)
-        {
-            SeedOrders();
-            context.AttachRange(_orders);
-            context.AttachRange(_orderDetails);
+            context.AttachRange(_quizzes);
         }
 
         context.AttachRange(_images);
@@ -123,10 +113,10 @@ public class Seed
         await _context.SaveChangesAsync();
     }
 
-    public static void SeedProducts()
+    public static void SeedQuizzes()
     {
         SeedCategories();
-        
+
         var names = new List<string>
         {
             "Nike Air Force 1 NDESTRUKT",
@@ -157,14 +147,14 @@ public class Seed
         var desc =
             "The Air Force 1 NDSTRKT blends unbelievable comfort with head-turning style and street-ready toughness to create an \'indestructible\' feel. In a nod to traditional work boots, the timeless silhouette comes covered in rubber reinforcements in high-wear areas. Lace up for tough conditions with this hardy take on a lifestyle classic.\nIntroduced in 1982, the Air Force 1 redefined basketball footwear from the hardwood to the tarmac. It was the first basketball sneaker to house Nike Air, but its innovative nature has since taken a back seat to its status as a street icon.";
 
-        _products = new List<Product>();
+        _quizzes = new List<Quiz>();
 
         var start = new DateTime(2020, 1, 1);
         var range = (DateTime.Today - start).Days;
 
         for (int i = 0, len = names.Count; i < len; i++)
         {
-            var product = new Product
+            var quiz = new Quiz
             {
                 Name = names[i],
                 Price = new decimal(_random.NextDouble() * 200),
@@ -175,13 +165,13 @@ public class Seed
             var ran = _random.Next(3);
             if (ran != 2)
             {
-                product.Category = _categories[ran];
+                quiz.Category = _categories[ran];
             }
 
-            _products.Add(product);
+            _quizzes.Add(quiz);
         }
     }
-    
+
     public static void SeedCategories() {
         _categories = new List<Category>
         {
@@ -189,62 +179,11 @@ public class Seed
             new() { Name = "For Women" }
         };
     }
-
-    public static void SeedOrders()
-    {
-        var user = _userManager.Users.FirstOrDefault();
-        
-        _orders = new List<Order>
-        {
-            new()
-            {
-                UserId = user.Id,
-                FullName = "Customer 01",
-                Email = "customer01@example.com",
-                PhoneNumber = "01234",
-                Address = "fake street 01"
-            },
-            new()
-            {
-                UserId = user.Id,
-                FullName = "Customer 02",
-                Email = "customer02@example.com",
-                PhoneNumber = "56789",
-                Address = "fake street 02"
-            }
-        };
-        
-        _orderDetails = new List<OrderDetail>
-        {
-            new OrderDetail
-            {
-                Order = _orders[0],
-                Price = _products[0].Price,
-                Product = _products[0],
-                Quantity = 5
-            },
-            new OrderDetail
-            {
-                Order = _orders[0],
-                Price = _products[1].Price,
-                Product = _products[1],
-                Quantity = 2
-            },
-            new OrderDetail
-            {
-                Order = _orders[1],
-                Price = _products[3].Price,
-                Product = _products[3],
-                Quantity = 3
-            }
-        };
-    }
-    
 }
 
 public class SeedingConfig
 {
     public bool SeedUsers { get; set; }
-    public bool SeedProducts { get; set; }
+    public bool SeedQuizzes { get; set; }
     public bool SeedOrders { get; set; }
 }

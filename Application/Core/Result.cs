@@ -1,4 +1,4 @@
-using Domain.Product;
+using Domain.Quiz;
 
 namespace Application.Core;
 
