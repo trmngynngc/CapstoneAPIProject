@@ -11,7 +11,6 @@ public class Seed
     {
         SeedUsers = false,
         SeedQuizzes = false,
-        SeedOrders = true
     };
 
     private static readonly Random _random = new();
@@ -76,24 +75,27 @@ public class Seed
         {
             new()
             {
-                Name = "Amos Blanda",
-                UserName = "amos",
-                Email = "amos@test.com",
-                Address = "1 at fake street"
+                Name = "Admin User",
+                UserName = "admin",
+                Email = "admin@test.com",
+                Address = "123 Admin Lane, Cityville",
+                Bio = "Administrator with full access."
             },
             new()
             {
-                Name = "Brent Goodwin",
-                UserName = "brent",
-                Email = "brent@test.com",
-                Address = "2 at fake street"
+                Name = "John Doe",
+                UserName = "johndoe",
+                Email = "johndoe@test.com",
+                Address = "456 Test Street, Test City",
+                Bio = "Aspiring IELTS student preparing for university admission."
             },
             new()
             {
-                Name = "Carol Koss",
-                UserName = "carol",
-                Email = "carol@test.com",
-                Address = "3 at fake street"
+                Name = "Jane Smith",
+                UserName = "janesmith",
+                Email = "janesmith@test.com",
+                Address = "789 Example Blvd, Example City",
+                Bio = "Language enthusiast and IELTS candidate."
             }
         };
     }
@@ -117,56 +119,52 @@ public class Seed
     {
         SeedCategories();
 
-        var names = new List<string>
+        var titles = new List<string>
         {
-            "Nike Air Force 1 NDESTRUKT",
-            "Nike Space Hippie 04",
-            "Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear",
-            "Nike Blazer Low 77 Vintage",
-            "Nike ZoomX SuperRep Surge",
-            "Zoom Freak 2",
-            "Nike Air Max Zephyr",
-            "Jordan Delta",
-            "Air Jordan XXXV PF",
-            "Nike Waffle Racer Crater",
-            "Kyrie 7 EP Sisterhood",
-            "Nike Air Zoom BB NXT",
-            "Nike Air Force 1 07 LX",
-            "Nike Air Force 1 Shadow SE",
-            "Nike Air Zoom Tempo NEXT",
-            "Nike DBreak-Type",
-            "Nike Air Max Up",
-            "Nike Air Max 270 React ENG",
-            "NikeCourt Royale",
-            "Nike Air Zoom Pegasus 37 Premium",
-            "Nike Air Zoom SuperRep",
-            "NikeCourt Royale",
-            "Nike React Art3mis",
-            "Nike React Infinity Run Flyknit"
+            "IELTS Reading Test 1",
+            "IELTS Reading Test 2",
+            "IELTS Listening Test 1",
+            "IELTS Listening Test 2"
         };
-        var desc =
-            "The Air Force 1 NDSTRKT blends unbelievable comfort with head-turning style and street-ready toughness to create an \'indestructible\' feel. In a nod to traditional work boots, the timeless silhouette comes covered in rubber reinforcements in high-wear areas. Lace up for tough conditions with this hardy take on a lifestyle classic.\nIntroduced in 1982, the Air Force 1 redefined basketball footwear from the hardwood to the tarmac. It was the first basketball sneaker to house Nike Air, but its innovative nature has since taken a back seat to its status as a street icon.";
 
         _quizzes = new List<Quiz>();
+
+        var questionsData = new List<(string QuestionText, string CorrectAnswer)>
+        {
+            ("What is the main idea of the passage?", "The main idea is about the evolution of the internet."),
+            ("What did the speaker mention about climate change?", "The speaker discussed the consequences of climate change."),
+            ("In the passage, what is the correct answer regarding renewable energy?", "Renewable energy is crucial for reducing carbon emissions."),
+            ("What did the speaker emphasize about new technologies?", "The speaker highlighted the rapid pace of technological development.")
+        };
 
         var start = new DateTime(2020, 1, 1);
         var range = (DateTime.Today - start).Days;
 
-        for (int i = 0, len = names.Count; i < len; i++)
+        for (int i = 0, len = titles.Count; i < len; i++)
         {
             var quiz = new Quiz
             {
-                Name = names[i],
-                Price = new decimal(_random.NextDouble() * 200),
-                Stocks = _random.Next(0, 20),
-                Description = desc,
+                Title = titles[i],
+                CreateDateTime = DateTime.Now,
+                UpdateDateTime = DateTime.Now,
+                Category = _categories[i % _categories.Count]
             };
 
-            var ran = _random.Next(3);
-            if (ran != 2)
+            // Create questions for each quiz
+            var questions = new List<Question>();
+            foreach (var questionData in questionsData)
             {
-                quiz.Category = _categories[ran];
+                var question = new Question
+                {
+                    QuestionText = questionData.QuestionText,
+                    CorrectAnswer = questionData.CorrectAnswer,
+                    Quiz = quiz
+                };
+
+                questions.Add(question);
             }
+
+            quiz.Questions = questions;
 
             _quizzes.Add(quiz);
         }
@@ -175,8 +173,8 @@ public class Seed
     public static void SeedCategories() {
         _categories = new List<Category>
         {
-            new() { Name = "For Men" },
-            new() { Name = "For Women" }
+            new() { Name = "Reading" },
+            new() { Name = "Listening" }
         };
     }
 }
@@ -185,5 +183,4 @@ public class SeedingConfig
 {
     public bool SeedUsers { get; set; }
     public bool SeedQuizzes { get; set; }
-    public bool SeedOrders { get; set; }
 }

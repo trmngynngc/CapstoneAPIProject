@@ -17,73 +17,6 @@ namespace Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
 
-            modelBuilder.Entity("Domain.Cart.Cart", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("Domain.Cart.CartDetail", b =>
-                {
-                    b.Property<string>("CartId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CartId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartDetails");
-                });
-
-            modelBuilder.Entity("Domain.Coupon.Coupon", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("EndDateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Coupons");
-                });
-
-            modelBuilder.Entity("Domain.Coupon.UserCoupon", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("CouponId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId", "CouponId");
-
-                    b.HasIndex("CouponId");
-
-                    b.ToTable("UserCoupons");
-                });
-
             modelBuilder.Entity("Domain.Image.Image", b =>
                 {
                     b.Property<Guid>("Id")
@@ -107,73 +40,7 @@ namespace Persistence.Migrations
                     b.ToTable("Image");
                 });
 
-            modelBuilder.Entity("Domain.Order.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("CouponId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CouponId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Domain.Order.OrderDetail", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetails");
-                });
-
-            modelBuilder.Entity("Domain.Product.Category", b =>
+            modelBuilder.Entity("Domain.Quiz.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,35 +55,43 @@ namespace Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Domain.Product.Product", b =>
+            modelBuilder.Entity("Domain.Quiz.Question", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<string>("CorrectAnswer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Question");
+                });
+
+            modelBuilder.Entity("Domain.Quiz.Quiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreateDateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Stocks")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Thumbnail")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -227,7 +102,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -438,77 +313,24 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Cart.CartDetail", b =>
+            modelBuilder.Entity("Domain.Quiz.Question", b =>
                 {
-                    b.HasOne("Domain.Cart.Cart", "Cart")
-                        .WithMany()
-                        .HasForeignKey("CartId")
+                    b.HasOne("Domain.Quiz.Quiz", "Quiz")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Product.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
+                    b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Domain.Coupon.UserCoupon", b =>
+            modelBuilder.Entity("Domain.Quiz.Quiz", b =>
                 {
-                    b.HasOne("Domain.Coupon.Coupon", "Coupon")
+                    b.HasOne("Domain.Quiz.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CouponId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coupon");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Order.Order", b =>
-                {
-                    b.HasOne("Domain.Coupon.Coupon", "Coupon")
-                        .WithMany()
-                        .HasForeignKey("CouponId");
-
-                    b.Navigation("Coupon");
-                });
-
-            modelBuilder.Entity("Domain.Order.OrderDetail", b =>
-                {
-                    b.HasOne("Domain.Order.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Product.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Domain.Product.Product", b =>
-                {
-                    b.HasOne("Domain.Product.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });
@@ -571,6 +393,11 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Quiz.Quiz", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }
