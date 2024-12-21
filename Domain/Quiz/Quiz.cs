@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Domain.Quiz;
 
 public class Quiz
@@ -12,5 +10,5 @@ public class Quiz
     public Guid CategoryId { get; set; }
     public Category Category { get; set; }
 
-    public List<Question> Questions { get; set; }
+    public List<Section> Sections { get; set; } = new List<Section>();
 }

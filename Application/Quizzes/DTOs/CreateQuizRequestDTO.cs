@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.Sections;
 
 namespace Application.Quizzes;
 
@@ -8,11 +9,7 @@ public class CreateQuizRequestDTO
     public string Title { get; set; }
 
     [Required]
-    public string QuestionText  { get; set; }
-
-    [Required]
-    public string CorrectAnswer { get; set; }
-
-    [Required]
     public Guid CategoryId { get; set; }
+
+    public List<CreateSectionRequestDTO> Sections { get; set; } = new List<CreateSectionRequestDTO>();
 }

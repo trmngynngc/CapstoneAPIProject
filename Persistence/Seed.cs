@@ -152,19 +152,19 @@ public class Seed
 
             // Create questions for each quiz
             var questions = new List<Question>();
-            foreach (var questionData in questionsData)
-            {
-                var question = new Question
-                {
-                    QuestionText = questionData.QuestionText,
-                    CorrectAnswer = questionData.CorrectAnswer,
-                    Quiz = quiz
-                };
+            // foreach (var questionData in questionsData)
+            // {
+            //     var question = new Question
+            //     {
+            //         Content = questionData.Content,
+            //         CorrectAnswer = questionData.CorrectAnswer,
+            //         Quiz = quiz
+            //     };
+            //
+            //     questions.Add(question);
+            // }
 
-                questions.Add(question);
-            }
-
-            quiz.Questions = questions;
+            // quiz.Questions = questions;
 
             _quizzes.Add(quiz);
         }
