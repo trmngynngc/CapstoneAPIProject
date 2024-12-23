@@ -61,22 +61,22 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CorrectAnswer")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("QuizId")
+                    b.Property<Guid>("SectionId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuizId");
+                    b.HasIndex("SectionId");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("Domain.Quiz.Quiz", b =>
@@ -103,6 +103,31 @@ namespace Persistence.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Quizzes");
+                });
+
+            modelBuilder.Entity("Domain.Quiz.Section", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("QuizId1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("QuizId1");
+
+                    b.ToTable("Sections");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -315,13 +340,13 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Quiz.Question", b =>
                 {
-                    b.HasOne("Domain.Quiz.Quiz", "Quiz")
+                    b.HasOne("Domain.Quiz.Section", "Section")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId")
+                        .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Quiz");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Domain.Quiz.Quiz", b =>
@@ -333,6 +358,23 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Domain.Quiz.Section", b =>
+                {
+                    b.HasOne("Domain.Quiz.Quiz", null)
+                        .WithMany("Sections")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Quiz.Quiz", "Quiz")
+                        .WithMany()
+                        .HasForeignKey("QuizId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -396,6 +438,11 @@ namespace Persistence.Migrations
                 });
 
             modelBuilder.Entity("Domain.Quiz.Quiz", b =>
+                {
+                    b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("Domain.Quiz.Section", b =>
                 {
                     b.Navigation("Questions");
                 });

@@ -12,8 +12,8 @@ public class DataContext : IdentityDbContext<User>
     }
 
     public DbSet<Quiz> Quizzes { get; set; }
-    public DbSet<Quiz> Sections  { get; set; }
-    public DbSet<Quiz> Questions  { get; set; }
+    public DbSet<Section> Sections  { get; set; }
+    public DbSet<Question> Questions  { get; set; }
 
     public DbSet<Category> Categories { get; set; }
 
