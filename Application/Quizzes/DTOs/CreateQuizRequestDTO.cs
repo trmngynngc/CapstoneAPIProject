@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Sections;
+using Domain.Quiz;
 
 namespace Application.Quizzes;
 
@@ -11,5 +12,5 @@ public class CreateQuizRequestDTO
     [Required]
     public Guid CategoryId { get; set; }
 
-    public List<CreateSectionRequestDTO> Sections { get; set; } = new List<CreateSectionRequestDTO>();
+    public ICollection<CreateSectionRequestDTO> Sections { get; set; } = new List<CreateSectionRequestDTO>();
 }

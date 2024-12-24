@@ -2,6 +2,7 @@ using Application.Core;
 using AutoMapper;
 using Domain.Quiz;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Quizzes;
@@ -28,8 +29,16 @@ public class Create
       {
          var quiz = new Quiz();
          _mapper.Map(request.Quiz, quiz);
+
+         var categoryExists = await _context.Categories.AnyAsync(c => c.Id == quiz.CategoryId, cancellationToken);
+         if (!categoryExists)
+            return Result<Unit>.Failure("Invalid categoryId.");
+
          _context.Quizzes.Add(quiz);
-         await _context.SaveChangesAsync();
+         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+         if (!result)
+            return Result<Unit>.Failure("Failed to create the quiz");
 
          return Result<Unit>.Success(Unit.Value);
       }

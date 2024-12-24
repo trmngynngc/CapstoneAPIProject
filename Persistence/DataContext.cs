@@ -23,7 +23,7 @@ public class DataContext : IdentityDbContext<User>
 
         builder.Entity<Quiz>()
             .HasMany(q => q.Sections)
-            .WithOne()
+            .WithOne(s => s.Quiz)
             .HasForeignKey(s => s.QuizId);
 
         builder.Entity<Section>()

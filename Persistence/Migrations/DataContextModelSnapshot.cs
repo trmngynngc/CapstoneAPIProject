@@ -61,11 +61,11 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("CorrectAnswer")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CorrectAnswer")
+                    b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -100,8 +100,6 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Quizzes");
                 });
 
@@ -111,10 +109,11 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("QuizId")
+                    b.Property<string>("Paragraph")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("QuizId1")
+                    b.Property<Guid>("QuizId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -124,8 +123,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
-
-                    b.HasIndex("QuizId1");
 
                     b.ToTable("Sections");
                 });
@@ -349,28 +346,11 @@ namespace Persistence.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("Domain.Quiz.Quiz", b =>
-                {
-                    b.HasOne("Domain.Quiz.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("Domain.Quiz.Section", b =>
                 {
-                    b.HasOne("Domain.Quiz.Quiz", null)
+                    b.HasOne("Domain.Quiz.Quiz", "Quiz")
                         .WithMany("Sections")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Quiz.Quiz", "Quiz")
-                        .WithMany()
-                        .HasForeignKey("QuizId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

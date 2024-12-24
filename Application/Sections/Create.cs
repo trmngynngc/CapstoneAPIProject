@@ -28,9 +28,11 @@ namespace Application.Sections
             {
                 var section = new Section();
                 _mapper.Map(request.Section, section);
-
                 _context.Sections.Add(section);
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+                if (!result)
+                    return Result<Unit>.Failure("Failed to create the section");
 
                 return Result<Unit>.Success(Unit.Value);
             }

@@ -11,6 +11,7 @@ namespace Application.Questions
         public class Command : IRequest<Result<Unit>>
         {
             public CreateQuestionRequestDTO Question { get; set; }
+            public Guid SectionId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -26,11 +27,20 @@ namespace Application.Questions
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var section = await _context.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken);
+                if (section == null)
+                    return Result<Unit>.Failure("Section not found");
+
                 var question = new Question();
                 _mapper.Map(request.Question, question);
+                question.SectionId = request.SectionId;
 
                 _context.Questions.Add(question);
-                await _context.SaveChangesAsync();
+
+                var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+                if (!result)
+                    return Result<Unit>.Failure("Failed to create the question");
 
                 return Result<Unit>.Success(Unit.Value);
             }

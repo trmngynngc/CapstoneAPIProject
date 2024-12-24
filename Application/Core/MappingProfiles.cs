@@ -22,13 +22,15 @@ public class MappingProfiles : Profile
 
     private void CreateQuizMaps()
     {
-        CreateMap<CreateQuizRequestDTO, Quiz>();
+        CreateMap<CreateQuizRequestDTO, Quiz>()
+            .ForMember(q => q.Sections, o => o.MapFrom(dto => dto.Sections));
         CreateMap<EditQuizRequestDTO, Quiz>();
     }
 
     private void CreateSectionMaps()
     {
-        CreateMap<CreateSectionRequestDTO, Section>();
+        CreateMap<CreateSectionRequestDTO, Section>()
+            .ForMember(s => s.Questions, o => o.MapFrom(dto => dto.Questions));
         CreateMap<EditSectionRequestDTO, Section>();
     }
 

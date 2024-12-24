@@ -147,7 +147,7 @@ public class Seed
                 Title = titles[i],
                 CreateDateTime = DateTime.Now,
                 UpdateDateTime = DateTime.Now,
-                Category = _categories[i % _categories.Count]
+                // Category = _categories[i % _categories.Count]
             };
 
             // Create questions for each quiz

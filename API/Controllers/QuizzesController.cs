@@ -20,6 +20,4 @@ public class QuizzesController : ApiController
     {
         return HandleResult(await Mediator.Send(new Details.Query{Id = id}));
     }
-
-
 }

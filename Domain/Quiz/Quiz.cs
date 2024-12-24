@@ -8,7 +8,7 @@ public class Quiz
     public DateTime UpdateDateTime { get; set; } = DateTime.Now;
 
     public Guid CategoryId { get; set; }
-    public Category Category { get; set; }
+    // public Category Category { get; set; }
 
-    public List<Section> Sections { get; set; } = new List<Section>();
+    public ICollection<Section> Sections { get; set; } = new List<Section>();
 }
